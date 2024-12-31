@@ -1,14 +1,12 @@
-import { useState } from 'react'
-
+import SearchBar from "./components/SearchBar";
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      
-    </>
-  )
+    <div className="h-screen flex justify-center items-start bg-gray-100 pt-16">
+      <SearchBar />
+    </div>
+  );
 }
 
-export default App
+export default App;
