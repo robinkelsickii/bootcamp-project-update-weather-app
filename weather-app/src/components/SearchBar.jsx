@@ -1,10 +1,11 @@
 import { CiSearch } from "react-icons/ci";
 import { useState } from "react";
 import axios from "axios";
+import config from "../../config.json";
 
-const apiKey = process.env.REACT_APP_API_KEY;
+const apiKey = config.API_KEY;
 
-export default function SearchBar({ setWeatherData }) {
+export default function SearchBar({ setWeatherData, setLocation }) {
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
 
@@ -21,7 +22,15 @@ export default function SearchBar({ setWeatherData }) {
       }
 
       const res = await axios.get(url);
-      setWeatherData(res.data); // Pass the fetched data to the parent
+      setWeatherData(res.data);
+
+      const zipCodeUrl = `https://api.zippopotam.us/us/${input}`;
+      const zipData = await axios.get(zipCodeUrl);
+
+      const { 'place name': placeName, 'state abbreviation': stateAbbreviation } = zipData.data.places[0];
+      const country = res.data.sys.country;
+
+      setLocation(`${placeName}, ${stateAbbreviation}, ${country}`);
       setError("");
     } catch (err) {
       setError("Could not fetch weather data. Please try again.");

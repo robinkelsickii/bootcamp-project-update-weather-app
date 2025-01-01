@@ -1,18 +1,31 @@
-export default function WeatherDisplay({ weatherData }) {
-    if (!weatherData) {
-      return null; // Render nothing if no data is passed
-    }
-  
-    const { name, main, weather, wind } = weatherData;
-  
-    return (
-      <div className="mt-6 bg-white shadow-md rounded-lg p-4 w-80">
-        <h2 className="text-xl font-bold text-gray-800">{name}</h2>
-        <p className="text-gray-600 capitalize">{weather[0].description}</p>
-        <p className="text-lg font-semibold">{main.temp}°C</p>
-        <p className="text-sm text-gray-500">Feels like: {main.feels_like}°C</p>
-        <p className="text-sm text-gray-500">Wind: {wind.speed} m/s</p>
-      </div>
-    );
+function WeatherDisplay({ weatherData, location }) {
+  const { sys, main, weather, wind } = weatherData;
+  const temperature = main.temp;
+  const humidity = main.humidity;
+  const windSpeed = wind.speed;
+  const weatherDescription = weather[0].description;
+
+  const cityStateCountry = location.split(',');
+
+  let locationText = location;
+  if (cityStateCountry.length === 3) {
+    const [city, state, country] = cityStateCountry;
+    locationText = `${city}, ${state}, ${country}`;
+  } else {
+    locationText = `${location}, ${sys.country}`;
   }
-  
+
+  return (
+    <div className="w-80 p-4 bg-white rounded-lg shadow-md mt-6">
+      <h4 className="text-xl font-semibold">{locationText}</h4>
+      <p className="text-lg">{weatherDescription}</p>
+      <div className="mt-4">
+        <p>Temperature: {temperature}°C</p>
+        <p>Humidity: {humidity}%</p>
+        <p>Wind Speed: {windSpeed} m/s</p>
+      </div>
+    </div>
+  );
+}
+
+export default WeatherDisplay;
